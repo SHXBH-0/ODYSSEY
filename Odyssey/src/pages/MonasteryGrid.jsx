@@ -176,7 +176,7 @@ function MonasteryGrid({ monasteries }) {
 
       <div className="monastery-grid">
         {paged.map((m, idx) => (
-          <MonasteryCard key={idx + (m['Monastery Name'] || '')} monastery={m} />
+          <MonasteryCard key={m['Monastery Name'] || idx} monastery={m} />
         ))}
       </div>
 
