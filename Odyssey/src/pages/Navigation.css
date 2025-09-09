@@ -1,0 +1,162 @@
+/* Odyssey/src/pages/SingleMonasteryNavigation.css */
+
+.navigation-container {
+  display: flex;
+  height: calc(100vh - 20px); /* Full height minus some margin */
+  width: calc(100% - 20px);
+  margin: 10px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  background: var(--surface-color);
+}
+
+.sidebar {
+  width: 400px;
+  flex-shrink: 0;
+  padding: 24px;
+  overflow-y: auto;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  font-size: 1.5em;
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+/* --- Origin Input --- */
+.origin-input {
+  margin-bottom: 20px;
+  text-align: left;
+}
+.origin-input label {
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 8px;
+  display: block;
+}
+.origin-input input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1em;
+  margin-bottom: 8px;
+}
+.origin-input button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.origin-input button:hover {
+  background-color: #600018;
+}
+
+/* --- Travel Mode --- */
+.travel-mode-selector {
+  text-align: left;
+  margin-bottom: 20px;
+}
+.travel-mode-selector label {
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 8px;
+  display: block;
+}
+.travel-mode-selector select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: white;
+  font-size: 1em;
+}
+
+/* --- Monastery List --- */
+.monastery-list {
+  margin-top: 10px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+  flex-grow: 1; /* Makes the list take available space */
+}
+
+.monastery-item {
+  text-align: left;
+  padding: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  transition: background-color 0.2s, border-color 0.2s;
+  margin-bottom: 8px;
+}
+.monastery-item:hover {
+  background-color: #f5f5f5;
+}
+.monastery-item.selected {
+  background-color: #fdeae4;
+  border-color: var(--secondary-color);
+}
+.monastery-item strong {
+  display: block;
+  font-size: 1.1em;
+}
+.monastery-item p {
+  margin: 4px 0 0;
+  color: var(--text-color-light);
+  font-size: 0.9em;
+}
+
+/* --- Details & Directions --- */
+.monastery-details, .directions {
+  text-align: left;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+}
+.monastery-details h3, .directions h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+.monastery-details p {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.directions ol {
+  padding-left: 20px;
+}
+.directions li {
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.directions li:last-child {
+  border-bottom: none;
+}
+
+/* --- Map --- */
+.map-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Error Message --- */
+.location-error {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  border: 1px solid #D8000C;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 10px;
+  font-size: 0.9em;
+}

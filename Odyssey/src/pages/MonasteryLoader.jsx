@@ -1,38 +1,51 @@
 // src/components/MonasteryLoader.js
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import MonasteryGrid from './MonasteryGrid'; // You'll need this component too
+import Navigation from './Navigation';
+import MonasteryGrid from './MonasteryGrid';
 
 function MonasteryLoader() {
   const [monasteries, setMonasteries] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+  const [view, setView] = useState('navigation'); // 'navigation' or 'grid'
+
   useEffect(() => {
-  const loadCSV = async () => {
-    try {
-      const response = await fetch('/monasteries.csv');
-      const csvText = await response.text();
-      Papa.parse(csvText, {
-        complete: (results) => {
-          setMonasteries(results.data);
-          setLoading(false);
-        },
-        header: true,
-        skipEmptyLines: true
-      });
-    } catch (error) {
-      console.error('Error loading CSV:', error);
-      setLoading(false);
-    }
-  };
+    const loadCSV = async () => {
+      try {
+        const response = await fetch('/monasteries.csv');
+        const csvText = await response.text();
+        Papa.parse(csvText, {
+          complete: (results) => {
+            setMonasteries(results.data);
+            setLoading(false);
+          },
+          header: true,
+          skipEmptyLines: true
+        });
+      } catch (error) {
+        console.error('Error loading CSV:', error);
+        setLoading(false);
+      }
+    };
 
-  loadCSV();
-}, []);
+    loadCSV();
+  }, []);
 
-  
   if (loading) return <div>Loading monasteries...</div>;
-  
-  return <MonasteryGrid monasteries={monasteries} />;
+
+  return (
+    <div>
+      <div style={{ marginBottom: '1rem' }}>
+        <button onClick={() => setView('navigation')}>Navigation View</button>
+        <button onClick={() => setView('grid')}>Monastery Grid</button>
+      </div>
+      {view === 'navigation' ? (
+        <Navigation monasteries={monasteries} />
+      ) : (
+        <MonasteryGrid monasteries={monasteries} />
+      )}
+    </div>
+  );
 }
 
 export default MonasteryLoader;

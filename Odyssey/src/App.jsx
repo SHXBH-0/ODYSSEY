@@ -6,7 +6,12 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <MonasteryLoader />
+      <header className="App-header">
+        <h1>Sikkim Monasteries and Culture</h1>
+      </header>
+      <main>
+        <MonasteryLoader />
+      </main>
     </div>
   );
 }
