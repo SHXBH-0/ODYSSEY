@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import Navigation from './Navigation';
 import MonasteryGrid from './MonasteryGrid';
-import'./calender.jsx';
+import MyCalendar from './calender';
 
 function MonasteryLoader() {
   const [monasteries, setMonasteries] = useState([]);

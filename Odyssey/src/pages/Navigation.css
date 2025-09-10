@@ -117,32 +117,80 @@
   font-size: 0.9em;
 }
 
-/* --- Details & Directions --- */
-.monastery-details, .directions {
-  text-align: left;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-color);
-}
-.monastery-details h3, .directions h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-}
-.monastery-details p {
-  margin-bottom: 8px;
-  line-height: 1.5;
+.top-right-panel {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 600px;        /* Adjust as needed */
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  z-index: 1000;
+  padding: 16px;
 }
 
-.directions ol {
-  padding-left: 20px;
+.panel-columns {
+  display: flex;
+  gap: 24px;           /* Space between columns */
 }
-.directions li {
-  padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+
+.monastery-details, .directions {
+  flex: 1 1 0;
+  border-top: none;    /* Remove top border inside panel */
+  margin-top: 0;       /* Remove top margin inside panel */
+  padding-top: 0;      /* Remove padding */
+  text-align: left;
 }
-.directions li:last-child {
-  border-bottom: none;
+
+@media (max-width: 700px) {
+  .top-right-panel {
+    width: 90vw;       /* Responsive: nearly full width on mobile */
+    right: 5vw;
+    top: 8px;
+    padding: 8px;
+  }
+  .panel-columns {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
+.directions {
+  max-height: 320px;   /* adjust as needed */
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.top-right-panel {
+  max-width: 420px;    /* adjust as desired */
+}
+
+.location-snackbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 24px;
+  background: #24292f;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  min-width: 220px;
+  max-width: 90vw;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  z-index: 3000;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Optionally, tighten up panel look */
+.monastery-details, .directions {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+  text-align: left;
+}
+
+
 
 /* --- Map --- */
 .map-container {

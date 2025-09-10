@@ -52,8 +52,3 @@
     grid-template-columns: 1fr;
   }
 }
-.highlight {
-  background: orange;
-  color: white;
-  border-radius: 50%;
-}

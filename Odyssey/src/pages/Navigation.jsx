@@ -31,12 +31,13 @@ const SingleMonasteryNavigation = ({ monasteries }) => {
   const [directionsService, setDirectionsService] = useState(null);
   const [directionsRenderer, setDirectionsRenderer] = useState(null);
   const [selectedMonastery, setSelectedMonastery] = useState(null);
+  const [hoveredMonastery, setHoveredMonastery] = useState(null);
   const [origin, setOrigin] = useState('');
   const [route, setRoute] = useState(null);
   const [routeInfo, setRouteInfo] = useState({ distance: '', duration: '' });
   const [travelMode, setTravelMode] = useState('DRIVING');
   const [locationError, setLocationError] = useState('');
-  const [googleMapsUrl, setGoogleMapsUrl] = useState(''); // State for the fallback URL
+  const [googleMapsUrl, setGoogleMapsUrl] = useState('');
   const mapRef = useRef(null);
   const originInputRef = useRef(null);
 
@@ -110,19 +111,19 @@ const SingleMonasteryNavigation = ({ monasteries }) => {
       alert('Please enter a starting location.');
       return;
     }
-    
-    // Clear previous results
     directionsRenderer.setDirections({ routes: [] });
     setRoute(null);
     setRouteInfo({ distance: '', duration: '' });
     setGoogleMapsUrl('');
 
+    // Use TRANSIT if user picks Train/Transit
+    const mode = travelMode === 'TRANSIT' ? 'TRANSIT' : travelMode;
 
     directionsService.route(
       {
         origin: startPoint,
         destination: destination,
-        travelMode: window.google.maps.TravelMode[travelMode],
+        travelMode: window.google.maps.TravelMode[mode],
       },
       (response, status) => {
         if (status === 'OK') {
@@ -134,10 +135,9 @@ const SingleMonasteryNavigation = ({ monasteries }) => {
           });
           setRoute(response.routes[0]);
         } else {
-          // ** NEW: Generate Google Maps URL as a fallback **
           const originQuery = typeof startPoint === 'string' ? startPoint : `${startPoint.lat},${startPoint.lng}`;
           const destQuery = `${destination.lat},${destination.lng}`;
-          const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(originQuery)}&destination=${encodeURIComponent(destQuery)}&travelmode=${travelMode.toLowerCase()}`;
+          const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(originQuery)}&destination=${encodeURIComponent(destQuery)}&travelmode=${mode.toLowerCase()}`;
           setGoogleMapsUrl(url);
 
           if (status === 'ZERO_RESULTS') {
@@ -162,15 +162,26 @@ const SingleMonasteryNavigation = ({ monasteries }) => {
     }
   };
   
-    useEffect(() => {
-        if (selectedMonastery && origin) {
-            const destination = parseCoordinates(selectedMonastery['GPS Coordinates']);
-            if (destination) {
-                calculateRoute(destination);
-            }
-        }
-    }, [travelMode]);
+  useEffect(() => {
+      if (selectedMonastery && origin) {
+          const destination = parseCoordinates(selectedMonastery['GPS Coordinates']);
+          if (destination) {
+              calculateRoute(destination);
+          }
+      }
+  }, [travelMode]);
 
+  // Helper: for transit routes, get only RAIL steps, or all if none
+  function getRailSteps(steps) {
+    const rails = steps.filter(
+      step =>
+        step.travel_mode === 'TRANSIT' &&
+        step.transit && step.transit.line &&
+        step.transit.line.vehicle && step.transit.line.vehicle.type &&
+        step.transit.line.vehicle.type.toUpperCase() === 'RAIL'
+    );
+    return rails.length > 0 ? rails : steps;
+  }
 
   return (
     <div className="navigation-container">
@@ -191,31 +202,28 @@ const SingleMonasteryNavigation = ({ monasteries }) => {
           <button onClick={handleUseMyLocation}>Use My Location</button>
           {locationError && <p className="location-error">{locationError}</p>}
         </div>
-        
         <div className="travel-mode-selector">
-            <label htmlFor="travel-mode">Travel Mode:</label>
-            <select id="travel-mode" value={travelMode} onChange={(e) => setTravelMode(e.target.value)}>
-                <option value="DRIVING">Driving</option>
-                <option value="TRANSIT">Transit</option>
-                <option value="WALKING">Walking</option>
-                <option value="BICYCLING">Bicycling</option>
-            </select>
+          <label htmlFor="travel-mode">Travel Mode:</label>
+          <select id="travel-mode" value={travelMode} onChange={(e) => setTravelMode(e.target.value)}>
+            <option value="DRIVING">Driving</option>
+            <option value="WALKING">Walking</option>
+            <option value="TRANSIT">Train / Transit</option>
+          </select>
         </div>
-
         <div className="monastery-list">
           {monasteries.map((monastery, index) => (
             <div
               key={index}
               className={`monastery-item ${selectedMonastery === monastery ? 'selected' : ''}`}
               onClick={() => handleMonasterySelect(monastery)}
+              onMouseEnter={() => setHoveredMonastery(monastery)}
+              onMouseLeave={() => setHoveredMonastery(null)}
             >
               <strong>{monastery['Monastery Name']}</strong>
               <p>{monastery.Location}</p>
             </div>
           ))}
         </div>
-        
-        {/* ** NEW: Display the Google Maps link if it exists ** */}
         {googleMapsUrl && (
             <div className="fallback-link">
                 <p>Could not find a route in the app.</p>
@@ -224,34 +232,65 @@ const SingleMonasteryNavigation = ({ monasteries }) => {
                 </a>
             </div>
         )}
-
         {selectedMonastery && !googleMapsUrl && (
-          <div className="monastery-details">
-            <h3>Details for {selectedMonastery['Monastery Name']}</h3>
-            {routeInfo.distance && <p><strong>Distance:</strong> {routeInfo.distance}</p>}
-            {routeInfo.duration && <p><strong>Duration:</strong> {routeInfo.duration}</p>}
-            <p><strong>Founder:</strong> {selectedMonastery['Founder/Lineage']}</p>
-            <p><strong>Established:</strong> {selectedMonastery['Year Established']}</p>
-            <p><strong>History:</strong> {selectedMonastery['Historical Background']}</p>
-          </div>
+              <div className="monastery-details">
+                <h3>Details for {selectedMonastery['Monastery Name']}</h3>
+                {routeInfo.distance && <p><strong>Distance:</strong> {routeInfo.distance}</p>}
+                {routeInfo.duration && <p><strong>Duration:</strong> {routeInfo.duration}</p>}
+                <p><strong>Founder:</strong> {selectedMonastery['Founder/Lineage']}</p>
+                <p><strong>Established:</strong> {selectedMonastery['Year Established']}</p>
+                <p><strong>History:</strong> {selectedMonastery['Historical Background']}</p>
+              </div>
         )}
-
         {route && (
+        <div className="top-right-panel">
           <div className="directions">
             <h3>Directions</h3>
             {route.legs.map((leg, legIndex) => (
               <div key={legIndex}>
                 <ol>
-                  {leg.steps.map((step, stepIndex) => (
-                    <li key={stepIndex} dangerouslySetInnerHTML={{ __html: step.instructions }} />
+                  {(travelMode === 'TRANSIT'
+                    ? getRailSteps(leg.steps)
+                    : leg.steps
+                  ).map((step, stepIndex) => (
+                    <li
+                      key={stepIndex}
+                      dangerouslySetInnerHTML={{ __html: step.instructions }}
+                      style={{
+                        background: (step.travel_mode === 'TRANSIT' &&
+                          step.transit && step.transit.line.vehicle &&
+                          step.transit.line.vehicle.type.toUpperCase() === 'RAIL')
+                          ? '#f0f8ff' : undefined,
+                        fontWeight: (step.travel_mode === 'TRANSIT' &&
+                          step.transit && step.transit.line.vehicle &&
+                          step.transit.line.vehicle.type.toUpperCase() === 'RAIL')
+                          ? 600 : 400
+                      }}
+                    />
                   ))}
                 </ol>
               </div>
             ))}
           </div>
+        </div>
         )}
       </div>
       <div ref={mapRef} className="map-container" />
+      {/* Snackbar for hovered monastery */}
+      {hoveredMonastery && (
+        
+        <div className="location-snackbar">
+          {routeInfo.distance && <p><strong>Distance:</strong> {routeInfo.distance}</p>}
+                {routeInfo.duration && <p><strong>Duration:</strong> {routeInfo.duration}</p>}
+          <strong>{hoveredMonastery['Monastery Name']}</strong>
+          <br />
+          {hoveredMonastery['GPS Coordinates'] && (
+            <span>GPS: {hoveredMonastery['GPS Coordinates']}</span>
+          )}
+          <br />
+          {hoveredMonastery.Location}
+        </div>
+      )}
     </div>
   );
 };
