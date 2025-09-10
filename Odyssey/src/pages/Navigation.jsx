@@ -5,25 +5,23 @@ const parseCoordinates = (coordString) => {
     if (!coordString || typeof coordString !== 'string') return null;
     const parts = coordString.split(',');
     if (parts.length !== 2) return null;
-    const latStr = parts[0];
-    const lngStr = parts[1];
     const parsePart = (partStr) => {
-        const cleaned = partStr.replace(/[^0-9.NSEWnsew]/g, '');
-        const directionMatch = cleaned.match(/[NSEWnsew]/);
-        if (!directionMatch) return NaN;
-        const direction = directionMatch[0].toUpperCase();
-        const numbers = cleaned.replace(/[NSEWnsew]/, '').split(/[^0-9.]+/).filter(Boolean).map(Number);
-        let decimal = 0;
-        if (numbers.length > 0) decimal += numbers[0];
-        if (numbers.length > 1) decimal += numbers[1] / 60;
-        if (numbers.length > 2) decimal += numbers[2] / 3600;
+        // Match DMS (degrees, minutes, seconds) with direction (N/S/E/W)
+        const regex = /(\d+(?:\.\d+)?)[°\s]*\s*(\d+(?:\.\d+)?)*[\'′\s]*\s*(\d+(?:\.\d+)?)*[\"\″\s]*\s*([NSEW])/i;
+        const match = partStr.trim().match(regex);
+        if (!match) return NaN;
+        const degrees = parseFloat(match[1]);
+        const minutes = match[2] ? parseFloat(match[2]) : 0;
+        const seconds = match[3] ? parseFloat(match[3]) : 0;
+        const direction = match[4].toUpperCase();
+        let decimal = degrees + minutes / 60 + seconds / 3600;
         if (direction === 'S' || direction === 'W') {
             decimal = -decimal;
         }
         return decimal;
     };
-    const lat = parsePart(latStr);
-    const lng = parsePart(lngStr);
+    const lat = parsePart(parts[0]);
+    const lng = parsePart(parts[1]);
     if (isNaN(lat) || isNaN(lng)) return null;
     return { lat, lng };
 };
