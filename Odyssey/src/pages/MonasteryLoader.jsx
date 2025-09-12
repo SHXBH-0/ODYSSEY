@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import Navigation from './Navigation';
 import MonasteryGrid from './MonasteryGrid';
+import Cultural from './Cultural';
 import MyCalendar from './calender';
 
 function MonasteryLoader() {
@@ -40,11 +41,14 @@ function MonasteryLoader() {
         <button onClick={() => setView('navigation')}>Navigation View</button>
         <button onClick={() => setView('grid')}>Monastery Grid</button>
         <button onClick={() => setView('calendar')}>Calendar View</button>
+        <button onClick={() => setView('cultural')}>Cultural Heritage</button>
       </div>
       {view === 'navigation' ? (
         <Navigation monasteries={monasteries} />
       ) : view === 'grid' ? (
         <MonasteryGrid monasteries={monasteries} />
+      ) : view === 'cultural' ? (
+        <Cultural />
       ) : (
         <MyCalendar />
       )}
