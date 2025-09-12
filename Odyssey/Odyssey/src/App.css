@@ -1,0 +1,7 @@
+
+.App {
+  text-align: center;
+}
+
+/* We will handle the main layout within the navigation component itself,
+   so this file can be kept minimal. */

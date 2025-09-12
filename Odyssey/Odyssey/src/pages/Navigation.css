@@ -1,0 +1,272 @@
+/* Odyssey/src/pages/SingleMonasteryNavigation.css */
+
+.navigation-container {
+  display: flex;
+  height: calc(100vh - 20px); /* Full height minus some margin */
+  width: calc(100% - 20px);
+  margin: 10px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  background: var(--surface-color);
+}
+
+.sidebar {
+  width: 400px;
+  flex-shrink: 0;
+  padding: 24px;
+  overflow-y: auto;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  font-size: 1.5em;
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+/* --- Origin Input --- */
+.origin-input {
+  margin-bottom: 20px;
+  text-align: left;
+}
+.origin-input label {
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 8px;
+  display: block;
+}
+.origin-input input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1em;
+  margin-bottom: 8px;
+}
+.origin-input button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.origin-input button:hover {
+  background-color: #600018;
+}
+
+/* --- Travel Mode --- */
+.travel-mode-selector {
+  text-align: left;
+  margin-bottom: 20px;
+}
+.travel-mode-selector label {
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 8px;
+  display: block;
+}
+.travel-mode-selector select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: white;
+  font-size: 1em;
+}
+
+/* --- Monastery List --- */
+.monastery-list {
+  margin-top: 10px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+  flex-grow: 2; /* Makes the list take available space */
+}
+
+.monastery-item {
+  text-align: left;
+  padding: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  transition: background-color 0.2s, border-color 0.2s;
+  margin-bottom: 8px;
+}
+.monastery-item:hover {
+  background-color: #f5f5f5;
+}
+.monastery-item.selected {
+  background-color: #fdeae4;
+  border-color: var(--secondary-color);
+}
+.monastery-item strong {
+  display: block;
+  font-size: 1.1em;
+}
+.monastery-item p {
+  margin: 4px 0 0;
+  color: var(--text-color-light);
+  font-size: 0.9em;
+}
+
+.top-right-panel {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 300px;        /* Adjust as needed */
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.panel-columns {
+  display: flex;
+  gap: 24px;           /* Space between columns */
+}
+
+.monastery-details, .directions {
+  flex: 1 1 0;
+  border-top: none;    /* Remove top border inside panel */
+  margin-top: 0;       /* Remove top margin inside panel */
+  padding-top: 0;      /* Remove padding */
+  text-align: left;
+}
+
+@media (max-width: 700px) {
+  .top-right-panel {
+    width: 90vw;       /* Responsive: nearly full width on mobile */
+    right: 5vw;
+    top: 8px;
+    padding: 8px;
+  }
+  .panel-columns {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+.directions {
+  max-height: 120px;   /* adjust as needed */
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.top-right-panel {
+  max-width: 200px;    /* adjust as desired */
+}
+
+.location-snackbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 24px;
+  background: #24292f;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  min-width: 220px;
+  max-width: 90vw;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  z-index: 3000;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Optionally, tighten up panel look */
+.monastery-details, .directions {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+  text-align: left;
+}
+
+
+
+/* --- Map --- */
+.map-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Error Message --- */
+.location-error {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  border: 1px solid #D8000C;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+.scrollable-list {
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid #ececec;
+  margin-top: 8px;
+  background: #fafafb;
+  border-radius: 6px;
+}
+.monastery-search {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.live-tracking-toggle {
+  margin: 12px 0 6px 0;
+  font-size: 15px;
+}
+/* Custom animated vehicle/car marker */
+.vehicle-marker-animated {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  left: -18px; /* Centered */
+  top: -18px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.vehicle-marker-animated .glow {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #f0f6ff;
+  box-shadow: 0 0 24px 4px #2196f388;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: vehicle-glow 1.4s infinite;
+}
+.vehicle-marker-animated .car {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  z-index: 1;
+  background: none;
+  display: block;
+}
+@keyframes vehicle-glow {
+  0%, 100% {
+    opacity: 0.7;
+    box-shadow: 0 0 12px 4px #2196f399;
+  }
+  70% {
+    opacity: 1.0;
+    box-shadow: 0 0 32px 8px #2196f366;
+  }
+}

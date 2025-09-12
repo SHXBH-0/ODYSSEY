@@ -1,0 +1,26 @@
+/* Odyssey/src/index.css */
+:root {
+  --primary-color: #800020; /* A deep maroon inspired by monastic robes */
+  --secondary-color: #FF9933; /* A saffron/gold accent */
+  --background-color: #f8f7f5; /* A soft, off-white background */
+  --surface-color: #ffffff; /* For cards and sidebars */
+  --text-color: #333333;
+  --text-color-light: #757575;
+  --border-color: #e0e0e0;
+  --font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --border-radius: 8px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
